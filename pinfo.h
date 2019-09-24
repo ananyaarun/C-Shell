@@ -1,0 +1,1 @@
+void pinfo_command(char *);

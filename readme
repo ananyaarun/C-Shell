@@ -1,0 +1,37 @@
+# C- Shell 
+## Assignment 2 By 20171019
+
+## Usage
+- make
+- ./shell
+
+## Features
+- shell prompt
+- cd , echo, pwd commands
+- ls command with flags -l -a -la -al
+- background and foreground process
+- pinfo command
+- history n command
+
+## Files
+
+### background.c
+- function to maintain an array of newly added background process
+
+### commands.c
+- implementation of cd, pwd and echo command
+
+### history.c
+- implementation of history and history n command
+
+### ls.c
+- implementation of the ls command with its various flags
+
+### main.c
+- main shell file that in a while loop calls the prompt, gets input from user and checks for finished background process
+
+### parse.c
+- parses the input based on tokenization (;) and calls functions for the respective commands accordingly after parsing
+
+### pinfo.c
+- implementation of the pinfo and pinfo pid command
