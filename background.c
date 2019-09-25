@@ -32,6 +32,7 @@ void background_add(char * input, int procid, int flag)
 		   	//printf("%d ughhh %d \n",i,array[i]);
 		   marker = 1;
 		   procname[i] = input;
+         procstatus[i] = 6;
 		   break;
    
    		}

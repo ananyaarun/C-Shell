@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <signal.h>
 #include <sys/utsname.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -16,10 +17,14 @@
 #include "main.h"
 #include "pinfo.h"
 #include "history.h"
+#include "environment.h"
+#include "job.h"
 
+int z_flag = 0;
 const char * compare1 = "<";
 const char * compare2 = ">";
 const char * compare3 = ">>";
+char * globaltoken;
 
 void parse_command(char * input)
 {
@@ -288,9 +293,63 @@ void redirection_command( char * input , int var1,int var2)
 
 }
 
+void ctrlz_handler(int sig) {
+
+int flag;
+flag = 0;
+
+	if(getpid() == parentpid)
+		flag = 1;
+	else
+		return;
+	z_flag = 1;
+    // signal(SIGTSTP, ctrlz_handler); 
+} 
+
+
+void ctrlc_handler(int sig) {
+	int flag;
+	flag = 0;
+	int temp;
+	temp = getpid();
+	if(temp == parentpid)
+		flag = 1;
+	else
+		return;
+
+	if(childpid > 0)
+	{
+		kill(childpid, SIGINT);
+	}
+     signal(SIGINT, ctrlc_handler);
+}
+
+void ctrlzhandler2() {
+	if(z_flag)
+	{
+		if(childpid != 0)
+		{	
+			//kill(childpid, SIGTTIN);
+			int temp=0;
+			temp = childpid;
+			setpgid(childpid, childpid);	
+			kill(childpid, SIGSTOP);
+			printf("ejdnuje\n");
+			background_add(globaltoken , childpid, 1);	
+			for(int i=0;i<1000;i++)
+			{
+				if(temp == array[i])
+				{
+					printf("%s\n",procname[i]);
+					procstatus[i] = 0;
+				}
+				break;
+			}		
+		}
+	}
+}
 void exc_command(char * input)
 {
-
 	char * temp = malloc (1 + strlen(input));
 	strcpy(temp,input);
 
@@ -304,6 +363,7 @@ void exc_command(char * input)
 
 	int check = 0;
 	int length = 0;
+	z_flag = 0;
 	length = strlen(input);
 	int i;
 	for(i=0;i< length;i++)
@@ -336,6 +396,9 @@ void exc_command(char * input)
 
 	int retval = 0;
 	int marker = 0;
+
+	// signal(SIGINT, ctrlc_handler);
+ //    signal(SIGTSTP, ctrlz_handler);
 
 	if(token == NULL) return;
 	if(strcmp(token,"exit")==0)
@@ -385,14 +448,41 @@ void exc_command(char * input)
 		marker = 1;
 
 	}
+	if(strcmp(token,"setenv")==0)
+	{
+		strcpy(hist[size++],temp1);
+		func_set(temp1);
+		marker = 1;
+
+	}
+	if(strcmp(token,"unsetenv")==0)
+	{
+		strcpy(hist[size++],temp1);
+		func_unset(temp1);
+		marker = 1;
+
+	}
+	if(strcmp(token,"jobs")==0)
+	{
+		strcpy(hist[size++],temp1);
+		jobs();
+		marker = 1;
+
+	}
 	if(marker == 0)
 	{
 		strcpy(hist[size++],temp1);
 
 		int status;
 		pid_t proc = fork();
+		childpid = proc;
 		if(proc < 0) 
 			printf("failed to create fork\n");
+
+        globaltoken = token;
+		// signal(SIGINT, ctrlc_handler);
+  //       signal(SIGTSTP, ctrlz_handler); 
+
 
 		if(proc == 0)
 		{
@@ -414,10 +504,13 @@ void exc_command(char * input)
 
 		if(proc > 0 && check == 0) 
 		{
-			while(waitpid(proc, &status, WNOHANG)!=proc);
+			signal(SIGINT, ctrlc_handler);
+    		signal(SIGTSTP, ctrlz_handler);
+			while(waitpid(proc, &status, WNOHANG)!=proc && !z_flag);
+			ctrlzhandler2();
 		}
 
 	}
-
+	z_flag = 0;
 	return;
 }

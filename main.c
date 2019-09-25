@@ -3,6 +3,7 @@
 #include <pwd.h>
 #include <unistd.h>
 #include <string.h>
+#include <signal.h>
 #include <sys/utsname.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -16,10 +17,13 @@ int homepathlength = 0;
 int array[1000];
 char *directoryname;
 char * procname[1000];
+int procstatus[1000];
 char hostname[1024];
 struct passwd *pw;
 char hist[100][100];
 int size=0;
+int parentpid;
+int childpid;
 
 void display_promt()
 {
@@ -107,10 +111,8 @@ while((bg=waitpid(-1, &status, WNOHANG))>0)
             if(array[i]==bg)
 
             {
-                // fprintf(stderr, "%s ", proc_name[i]);
-                //printf("hiiii %s\n",proc_name[0]);
                 printf("%s with pid %d exited normally\n",procname[i],bg);
-                array[i] = -10000;
+                array[i] = 100000000;
                 break;
             }
         }
@@ -123,6 +125,7 @@ return;
 
 int main()
 {
+  parentpid=getpid();
 
 int i;
 for (i=0;i<1000;i++)
@@ -137,6 +140,10 @@ homepathlength = strlen(homepath);
 
   hostname[1023] = '\0';
   gethostname(hostname, 1023);
+
+  signal(SIGINT, SIG_IGN);  
+  signal(SIGSTOP, SIG_IGN); 
+  signal(SIGTSTP, SIG_IGN); 
 
  while(1)
  {
