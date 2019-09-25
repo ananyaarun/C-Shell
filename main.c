@@ -18,6 +18,7 @@ int array[1000];
 char *directoryname;
 char * procname[1000];
 int procstatus[1000];
+int proccount[1000];
 char hostname[1024];
 struct passwd *pw;
 char hist[100][100];

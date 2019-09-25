@@ -331,19 +331,18 @@ void ctrlzhandler2() {
 		{	
 			//kill(childpid, SIGTTIN);
 			int temp=0;
-			temp = childpid;
 			setpgid(childpid, childpid);	
+			temp = childpid;
 			kill(childpid, SIGSTOP);
-			printf("ejdnuje\n");
-			background_add(globaltoken , childpid, 1);	
+			background_add(globaltoken , temp, 1);	
 			for(int i=0;i<1000;i++)
 			{
 				if(temp == array[i])
 				{
-					printf("%s\n",procname[i]);
+					printf("hdh%s\n",procname[i]);
 					procstatus[i] = 0;
+					break;
 				}
-				break;
 			}		
 		}
 	}
@@ -466,6 +465,27 @@ void exc_command(char * input)
 	{
 		strcpy(hist[size++],temp1);
 		jobs();
+		marker = 1;
+
+	}
+	if(strcmp(token,"kjob")==0)
+	{
+		strcpy(hist[size++],temp1);
+		kjob(temp1);
+		marker = 1;
+
+	}
+	if(strcmp(token,"bg")==0)
+	{
+		strcpy(hist[size++],temp1);
+		bg(temp1);
+		marker = 1;
+
+	}
+	if(strcmp(token,"fg")==0)
+	{
+		strcpy(hist[size++],temp1);
+		fg(temp1);
 		marker = 1;
 
 	}

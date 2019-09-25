@@ -5,6 +5,7 @@ extern char * homepath;
 extern int homepathlength;
 extern char * procname[1000];
 extern int procstatus[1000];
+extern int proccount[1000];
 extern char hist[100][100];	
 extern int array[1000];
 extern int size;

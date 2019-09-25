@@ -23,21 +23,19 @@ void background_add(char * input, int procid, int flag)
 
    if(flag == 1)
    {
-   for(i=0;i<1000;i++)
-   {
-   	
-   	if(array[i] < 0)
+      for(i=0;i<1000;i++)
+      { 	
+      	if(array[i] < 0)
    		{
-		   array[i] = procid;
-		   	//printf("%d ughhh %d \n",i,array[i]);
-		   marker = 1;
-		   procname[i] = input;
-         procstatus[i] = 6;
-		   break;
-   
+   		   array[i] = procid;
+   		   // printf("%d ughhh %d \n",i,array[i]);
+   		   marker = 1;
+   		   procname[i] = input;
+            procstatus[i] = 1;
+   		   break;
    		}
 
+      }
    }
-}
    return;
 }
