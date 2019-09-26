@@ -94,21 +94,26 @@ input = strtok(NULL, " \t\r\n");
   	printf("wrong usage of fg. Not valid\n");
   	return;
   }
-  sscanf(input, "%d", &var);
-printf("%d\n",var);
-int tempp=0;
-  for(int i=0; i<1000; i++)
-            {
-            	printf("%d\n",proccount[i]);
-                if(var==proccount[i]+1)
-                {
-                    // array[i] = 100000000;
-                    tempp =i;
-                    //printf("huwdhu11111111111\n");
-                    break;
-                }
-            }
-            array[tempp] = 100000000;
+  int tempp = 0;
+  	sscanf(input, "%d", &var);
+	// printf("%d\n",var);
+  	for(int i=0; i<1000; i++)
+    {
+    	// printf("%d\n",proccount[i]);
+        if(var==proccount[i])
+        {
+        	tempp = array[i];
+            array[i] = 100000000;
+            proccount[i] = 100000000;
+            //printf("huwdhu11111111111\n");
+            break;
+        }
+    }
+    printf("DBUG1: %d\n", tempp);
+    kill(tempp, SIGCONT);
+           int status;
+            while(waitpid(tempp, &status, WNOHANG)!=tempp);
+
 }
 
 void bg(char * input)

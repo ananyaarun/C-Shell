@@ -489,6 +489,13 @@ void exc_command(char * input)
 		marker = 1;
 
 	}
+	if(strcmp(token,"overkill")==0)
+	{
+		strcpy(hist[size++],temp1);
+		overkill();
+		marker = 1;
+
+	}
 	if(marker == 0)
 	{
 		strcpy(hist[size++],temp1);
