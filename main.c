@@ -112,7 +112,7 @@ while((bg=waitpid(-1, &status, WNOHANG))>0)
             if(array[i]==bg)
 
             {
-                printf("%s with pid %d exited normally\n",procname[i],bg);
+                printf("%s with pid %d exited \n",procname[i],bg);
                 array[i] = 100000000;
                 break;
             }

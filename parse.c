@@ -339,7 +339,7 @@ void ctrlzhandler2() {
 			{
 				if(temp == array[i])
 				{
-					printf("hdh%s\n",procname[i]);
+					//printf("hdh%s\n",procname[i]);
 					procstatus[i] = 0;
 					break;
 				}
@@ -478,6 +478,7 @@ void exc_command(char * input)
 	if(strcmp(token,"bg")==0)
 	{
 		strcpy(hist[size++],temp1);
+		//jobs1();
 		bg(temp1);
 		marker = 1;
 
@@ -485,6 +486,7 @@ void exc_command(char * input)
 	if(strcmp(token,"fg")==0)
 	{
 		strcpy(hist[size++],temp1);
+		//jobs1();
 		fg(temp1);
 		marker = 1;
 

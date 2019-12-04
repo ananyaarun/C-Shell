@@ -34,6 +34,32 @@ void jobs()
 }
 }
 
+void jobs1()
+{
+	//printf("ehjehuje\n");
+	int count = 0;
+    for(int i =0;i<1000;i++)
+    {
+    	if(array[i]>=0 && array[i] < 10000000)
+    	{
+	
+	//printf("[%d] ",++count);
+	proccount[i] = count;
+	char staa[100];
+	if(procstatus[i]!=0)
+		strcpy(staa,"Running");
+	if(procstatus[i]==0)
+		strcpy(staa,"Stopped");
+	//printf("%s ",staa);
+	//printf("%s ",procname[i]);
+	//printf("[%d]\n",array[i]);
+   }
+}
+}
+
+
+
+
 void kjob(char * input)
 {
   int one;
@@ -77,13 +103,25 @@ for(int i =0;i<1000;i++)
 	if(two == proccount[i])
 	tempp = i;
 }
-printf("%d %d\n",array[tempp],one);
+//printf("%d %d\n",array[tempp],one);
 
   int val = kill(array[tempp], one);
 }
 
 void fg(char * input)
 {
+// 	int count =0;
+
+// 	for(int i =0;i<1000;i++)
+//     {
+//     	if(array[i]>=0 && array[i] < 10000000)
+//     	{
+	
+// 	//printf("[%d] ",++count);
+// 	proccount[i] = count;
+// }
+// }
+	//jobs1();
    int var;
 	char * temp = malloc (1 + strlen(input));
   strcpy(temp,input);
@@ -109,15 +147,34 @@ input = strtok(NULL, " \t\r\n");
             break;
         }
     }
-    printf("DBUG1: %d\n", tempp);
+    //printf("DBUG1: %d\n", tempp);
     kill(tempp, SIGCONT);
            int status;
+			//signal(SIGINT, ctrlc_handler);
+    		//signal(SIGTSTP, ctrlz_handler);
+
             while(waitpid(tempp, &status, WNOHANG)!=tempp);
+			//ctrlzhandler2();
+
 
 }
 
+
+
+
+
 void bg(char * input)
 {
+// 	int count =0;
+// 	for(int i =0;i<1000;i++)
+//     {
+//     	if(array[i]>=0 && array[i] < 10000000)
+//     	{
+	
+// 	//printf("[%d] ",++count);
+// 	proccount[i] = count;
+// }
+// }
 	 int var;
 	char * temp = malloc (1 + strlen(input));
   strcpy(temp,input);
@@ -139,6 +196,10 @@ for(int i =0;i<1000;i++)
 procstatus[tempp] = 1;
 kill(array[tempp], SIGCONT);
 }
+
+
+
+
 
 void overkill(char *input) {
 
